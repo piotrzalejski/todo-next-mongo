@@ -11,12 +11,13 @@ export async function PUT(
       completed: boolean;
     }>;
   },
-  { todoId }: { todoId: string }
+  { params }: { params: { todoId: string } }
 ) {
   await connectDB();
   console.log('attempting to update todo...');
   try {
-    const id = todoId;
+    const id = params.todoId;
+    console.log('request: ', request);
     const { userId, todo, completed } = await request.json();
 
     // Use findOneAndUpdate to directly update the document based on its _id

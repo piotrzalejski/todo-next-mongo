@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
   try {
     if (!userId)
       return NextResponse.json(
-        { error: 'No user id provided' },
+        { error: 'Server: No user id provided' },
         { status: 400 }
       );
     console.log('made it to find');
@@ -23,15 +23,18 @@ export async function GET(request: NextRequest) {
     });
 
     console.log('user found');
-    return NextResponse.json({
-      message:
-        todos.length > 0
-          ? 'successfully fetched todos'
-          : 'this user has no todos: ',
-      todos,
-    });
+    return NextResponse.json(
+      {
+        message:
+          todos.length > 0
+            ? 'successfully fetched todos'
+            : 'this user has no todos: ',
+        todos,
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error('Error getting todos. ', error);
+    console.error('Server: Error getting todos. ', error);
     return NextResponse.error();
   }
 }
@@ -51,9 +54,12 @@ export async function POST(request: {
       { $push: { todos: { todo: todo, completed: false } } },
       { new: true, upsert: true }
     );
-    return NextResponse.json(userTodos);
+    return NextResponse.json(
+      { message: 'Server: Todo has been added.' },
+      { status: 201 }
+    );
   } catch (error) {
-    console.error('Error adding todo. ', error);
+    console.error('Server: Error adding todo. ', error);
     return NextResponse.error();
   }
 }
@@ -75,9 +81,12 @@ export async function DELETE(request: {
       { new: true }
     );
     if (!userTodos) return NextResponse.error();
-    return NextResponse.json(userTodos);
+    return NextResponse.json(
+      { message: 'Server: Todo successfully deleted.' },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error('Error deleting todo. ', error);
+    console.error('Server: Error deleting todo. ', error);
     return NextResponse.error();
   }
 }

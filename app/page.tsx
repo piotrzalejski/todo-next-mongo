@@ -8,6 +8,25 @@ import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+const fetchTodos = async (userId: string) => {
+  try {
+    const res = await fetch(`/api/todos?userId=${userId}`);
+    const data = await res.json();
+    if (data.todos) {
+      const extractedTodos = data.todos.flatMap(
+        (todoObject: { _id: string; todos: Todos[] }) => todoObject.todos
+      );
+      return extractedTodos;
+    } else {
+      console.error('No todos found:', data.message);
+      return [];
+    }
+  } catch (error) {
+    console.error('Error fetching todos:', error);
+    return [];
+  }
+};
+
 export default function Home() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -30,11 +49,34 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
       });
-      const data = await res.json();
-      console.log('data: ', data.todos);
-      const newTodo = data.todos[data.todos.length - 1];
-      setTodos([...todos, newTodo]);
-      setTodo('');
+      if (res.status === 201) {
+        setTodo('');
+        fetchTodos(userId)
+          .then((extractedTodos) => {
+            setTodos(extractedTodos);
+          })
+          .catch((error) => {
+            console.error('Error fetching todos:', error);
+          });
+      }
+    }
+  };
+
+  const deleteTodo = async (id: string) => {
+    if (status === 'authenticated' && session?.user) {
+      const res = await fetch('/api/todos', {
+        method: 'DELETE',
+        body: JSON.stringify({ userId: userId, id: id }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (res.status === 200) {
+        const newTodos = todos.filter((todo) => todo._id !== id);
+        setTodos(newTodos);
+      } else {
+        console.error('Client: Error deleting todo');
+      }
     }
   };
 
@@ -47,26 +89,16 @@ export default function Home() {
 
   useEffect(() => {
     if (status === 'authenticated' && session?.user) {
-      fetch(`/api/todos?userId=${userId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          console.log('fetch data: ', data);
-          if (data.todos) {
-            const extractedTodos = data.todos.flatMap(
-              (todoObject: { _id: string; todos: Todos[] }) => todoObject.todos
-            );
-            console.log('extracted: ', extractedTodos);
-            setTodos(extractedTodos);
-            setIsLoading(false);
-          } else {
-            console.error('No todos found:', data.message);
-          }
+      fetchTodos(userId)
+        .then((extractedTodos) => {
+          setTodos(extractedTodos);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error('Error fetching todos:', error);
         });
-      console.log('useSession Object: ', session);
     }
+    // fetch todos when component mounts or when status or session changes
   }, [status, session, userId]);
 
   if (status === 'loading') {
@@ -105,10 +137,24 @@ export default function Home() {
                   todos.map((todoItem) => (
                     <li
                       key={todoItem._id}
-                      className='flex justify-between items-center my-4 px-4 py-2 bg-[#27272a] rounded-md text-[#a1a1aa] text-lg shadow-md sm:w-96 w-full'
+                      className='flex justify-between items-center my-4 px-4 py-2 bg-[#27272a] rounded-md text-[#a1a1aa] text-lg shadow-md sm:w-96 w-full transition-all duration-300'
                     >
                       <span>{todoItem.todo}</span>
-                      {/* Add delete button here */}
+                      <div>
+                        <Button
+                          variant='ghost'
+                          className='text-sky-400 hover:text-sky-600 uppercase transition-all duration-200'
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant='ghost'
+                          className='text-red-400 hover:text-red-600 uppercase transition-all duration-200'
+                          onClick={() => deleteTodo(todoItem._id as string)}
+                        >
+                          Del
+                        </Button>
+                      </div>
                     </li>
                   ))}
               </>

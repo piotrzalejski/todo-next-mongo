@@ -29,9 +29,11 @@ export default function CredentialsForm() {
       router.push('/');
     } else {
       console.error(
-        `Status: ${signInResponse.status} 
+        `
+     Status: ${signInResponse.status} 
      Error: ${signInResponse.error}`
       );
+      toast.error(`Error: ${signInResponse.error}`);
     }
   };
 
@@ -50,7 +52,11 @@ export default function CredentialsForm() {
       },
     });
 
-    if (!res.ok) {
+    if (res.status === 409) {
+      toast.error('User already exists with that email!');
+      return console.error('User already exists');
+    } else if (!res.ok) {
+      toast.error('Error registering user');
       return console.error('Error registering user');
     } else {
       console.log(`User ${data.get('email')} registered successfully`);

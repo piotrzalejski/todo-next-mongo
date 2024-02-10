@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import User from '@/models/user';
 import bcrypt from 'bcrypt';
+import { connectDB } from '@/utils/database';
 
 export async function POST(request: NextRequest) {
   try {
+    await connectDB();
+    console.log('attempting to register user...');
     const body = await request.json();
     const { email, password } = body;
 

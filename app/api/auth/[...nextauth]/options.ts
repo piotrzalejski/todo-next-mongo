@@ -4,6 +4,7 @@ import { connectDB } from '@/utils/database';
 import User from '@/models/user';
 import bcrypt from 'bcrypt';
 import { SessionUser } from '@/lib/types';
+import { NextResponse } from 'next/server';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -15,28 +16,29 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials || !credentials.email || !credentials.password) {
-          return null;
+          throw new Error('Missing credentials');
         }
         try {
           await connectDB();
           const user = await User.findOne({ email: credentials.email });
 
-          if (
-            user &&
-            (await bcrypt.compare(credentials.password, user.password))
-          ) {
-            return user;
-          }
-
           if (!user) {
             console.log(`User: ${credentials.email} not found.`);
-          } else {
-            console.log(`Incorrect password for user: ${credentials.email}`);
+            throw new Error('User not found');
           }
-          return null;
+
+          const isPasswordCorrect = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+          if (!isPasswordCorrect) {
+            console.log(`Incorrect password for user: ${credentials.email}`);
+            throw new Error('Incorrect password');
+          }
+          return user;
         } catch (error) {
-          console.log('Error authorizing user: ', error);
-          return null;
+          console.log(error);
+          throw error;
         }
       },
     }),

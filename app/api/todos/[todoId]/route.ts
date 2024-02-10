@@ -1,24 +1,18 @@
 import UserTodos from '@/models/userTodos';
 import { connectDB } from '@/utils/database';
 import mongoose from 'mongoose';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function PUT(
-  request: {
-    json: () => Promise<{
-      userId: mongoose.Types.ObjectId;
-      todo: string;
-      completed: boolean;
-    }>;
-  },
+  request: NextRequest,
   { params }: { params: { todoId: string } }
 ) {
   await connectDB();
   console.log('attempting to update todo...');
   try {
     const id = params.todoId;
-    console.log('request: ', request);
-    const { userId, todo, completed } = await request.json();
+    const body = await request.json();
+    const { userId, todo, completed } = body;
 
     // Use findOneAndUpdate to directly update the document based on its _id
     const updatedTodo = await UserTodos.findOneAndUpdate(
@@ -36,7 +30,7 @@ export async function PUT(
       }) => item._id.equals(id)
     );
 
-    console.log('updatedTodo: ', updatedTodoItem);
+    // console.log('updatedTodo: ', updatedTodoItem);
     return NextResponse.json(
       {
         message: 'Updated todo successfully.',

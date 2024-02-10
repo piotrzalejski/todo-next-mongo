@@ -37,15 +37,18 @@ export async function GET(request: NextRequest) {
   }
 }
 // POST /api/todos
-export async function POST(request: {
-  json: () => Promise<{ userId: mongoose.Types.ObjectId; todo: string }>;
-}) {
+export async function POST(request: NextRequest) {
   await connectDB();
   console.log('attempting POST...');
   try {
-    const { userId, todo } = await request.json();
-    // console.log('userId', userId);
-    // console.log('todo', todo);
+    const body = await request.json();
+    const { userId, todo } = body;
+    if (!userId || !todo) {
+      return NextResponse.json(
+        { message: 'Missing userId or todo in request body' },
+        { status: 400 }
+      );
+    }
     const userTodos = await UserTodos.findOneAndUpdate(
       { userId: userId },
       // $push operator to add the todo to the array
@@ -64,16 +67,12 @@ export async function POST(request: {
 }
 
 // DELETE /api/todo/
-export async function DELETE(request: {
-  json: () => Promise<{
-    userId: mongoose.Types.ObjectId;
-    id: mongoose.Types.ObjectId;
-  }>;
-}) {
+export async function DELETE(request: NextRequest) {
   await connectDB();
   console.log('attempting DELETE...');
   try {
-    const { userId, id } = await request.json();
+    const body = await request.json();
+    const { userId, id } = body;
     const userTodos = await UserTodos.findOneAndUpdate(
       { userId: userId },
       // $pull operator to remove the todo from the array

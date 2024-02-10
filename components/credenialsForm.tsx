@@ -89,14 +89,14 @@ export default function CredentialsForm() {
           required
           className='w-full p-4 mb-4 h-auto'
         />
-        <Button className='w-full  h-auto p-4 mb-4 border border-none bg-[#1f2937] hover:bg-[#1f2937cc] text-white/80'>
+        <Button className='w-full  h-auto p-4 mb-4 border border-none bg-[#1f2937] hover:bg-[#1f2937cc] text-white/8'>
           {isRegister ? 'Register' : 'Login'}
         </Button>
         <p className='flex justify-center items-center'>
           {isRegister ? 'Already registered?' : "Don't have an account?"}
           <a
             href={isRegister ? '/login' : '/register'}
-            className='pl-3 transition-all duration-200 cursor-pointer '
+            className='pl-3 transition-all duration-200 cursor-pointer  hover:text-white/70'
           >
             {' '}
             {isRegister ? 'Login here' : 'Register here'}

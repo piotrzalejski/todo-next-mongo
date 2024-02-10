@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# TODO APP
 
-## Getting Started
+A Todo app built with Nextjs, MongoDB, NextAuth, Taillwind.
+Using credential authorization (email and password).
 
-First, run the development server:
+## Technologies
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- `Next.js`
+- `TypeScript`
+- `Tailwind`
+- `React`
+- `MongoDB`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Idea
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+<small>This idea spawned from being a bit overambitious with another idea. 😅</small>
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Proccess
 
-## Learn More
+I started by jotting down how I wanted the Todo app to function.
 
-To learn more about Next.js, take a look at the following resources:
+I then focused on creating the API route handlers and testing CRUD operations via Postman. Then I focused on the Todos Schema and Users Schema, followed by a login page, and the main todo page component.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+I would say this is where the fun started. The most challenging part was not how to get the data into the db, but how to display it, and having the list of todos update as one was being added, or one was being deleted.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+One thing I learned was how to set up route handling with nextjs. This was something that I will be able to take with me into the futture.
 
-## Deploy on Vercel
+## How can it be improved?
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Possible thoughts:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- maybe have the edit todo be in-line
+- I'm sure the main page.tsx could be refactored and cleaned up
+- look into
+
+## Current bugs?
+
+- add error toast when trying to register with an already registered email
+  - currently only logs an error in console

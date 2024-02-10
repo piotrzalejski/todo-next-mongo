@@ -1,13 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import User from '@/models/user';
 import bcrypt from 'bcrypt';
 
-export async function POST(request: {
-  json: () => Promise<{ email: string; password: string }>;
-}) {
+export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json();
-    console.log('email', email);
+    const body = await request.json();
+    const { email, password } = body;
 
     // confirm data exists
     if (!email || !password) {

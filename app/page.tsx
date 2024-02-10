@@ -153,7 +153,7 @@ export default function Home() {
     if (status !== 'authenticated') {
       router.push('/login');
     }
-  }, [status]);
+  }, [status, router]);
 
   useEffect(() => {
     if (status === 'authenticated' && session?.user) {

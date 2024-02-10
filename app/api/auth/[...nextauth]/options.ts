@@ -3,11 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { connectDB } from '@/utils/database';
 import User from '@/models/user';
 import bcrypt from 'bcrypt';
-
-type SessionUser = {
-  id: string;
-  email: string;
-};
+import { SessionUser } from '@/lib/types';
 
 export const authOptions: NextAuthOptions = {
   providers: [

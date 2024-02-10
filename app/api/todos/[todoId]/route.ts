@@ -37,10 +37,12 @@ export async function PUT(
     );
 
     console.log('updatedTodo: ', updatedTodoItem);
-    return NextResponse.json({
-      message: 'Updated todo successfully.',
-      updatedTodo: updatedTodoItem,
-    });
+    return NextResponse.json(
+      {
+        message: 'Updated todo successfully.',
+      },
+      { status: 202 }
+    );
   } catch (error) {
     console.error('Error updating todo. ', error);
     return NextResponse.error();

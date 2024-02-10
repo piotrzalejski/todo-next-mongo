@@ -20,13 +20,7 @@ Retrieve todos for a specific user.
 
 Response
 
-Returns an array of todo objects.
-
-Each todo object contains:
-
-- **\_id:** (mongoose.Types.ObjectId) The ID of the todo.
-- **todo:** (string) The todo description.
-- **completed:** (boolean) Indicates if the todo is completed.
+Returns a message and status of 200
 
 ---
 
@@ -39,15 +33,9 @@ Create a new todo for a specific user.
 - **userId:** (mongoose.Types.ObjectId) The ID of the user.
 - **todo:** (string) The todo description.
 
-**Response**
+**Successful Response**
 
-Returns the newly created todo object.
-
-The todo object contains:
-
-- **\_id:** (mongoose.Types.ObjectId) The ID of the todo.
-- **todo:** (string) The todo description.
-- **completed:** (boolean) Indicates if the todo is completed.
+Returns a message and status of 201
 
 ---
 
@@ -55,20 +43,14 @@ The todo object contains:
 
 Delete a todo for a specific user.
 
-Request Body
+**Request Body**
 
 - **userId:** (mongoose.Types.ObjectId) The ID of the user.
 - **id:** (mongoose.Types.ObjectId) The ID of the todo to delete.
 
-Response
+**Successful Response**
 
-Returns the updated list of todos after deletion.
-
-Each todo object contains:
-
-- **\_id:** (mongoose.Types.ObjectId) The ID of the todo.
-- **todo:** (string) The todo description.
-- **completed:** (boolean) Indicates if the todo is completed.
+Returns message and status of 200
 
 ---
 
@@ -78,17 +60,23 @@ Each todo object contains:
 
 This API endpoint is used to update a specific todo item for a user.
 
-### Base URL
+## Base URL
 
 ```
 PUT /api/todo/:id
 ```
 
-### Request Parameters
+**Request Parameters**
 
 - `id`: (string) The ID of the todo item to be updated.
 
-### Request Body
+Sample Usage
+
+```
+PUT /api/todo/65c4f2a325d3d302f12594be
+```
+
+**Request Body**
 
 The request body should be a JSON object with the following fields:
 
@@ -106,37 +94,10 @@ The request body should be a JSON object with the following fields:
 }
 ```
 
-### Response
+**Successful Response**
 
-- If the update is successful, the API will return the updated todo item.
-- The todo item contains the following fields:
-  - `_id`: (mongoose.Types.ObjectId) The ID of the todo item.
-  - `todo`: (string) The updated todo description.
-  - `completed`: (boolean) Indicates whether the todo item is completed or not.
-
-### Example Response
-
-```json
-{
-  "message": "Todo updated",
-  "updatedTodo": {
-    "todo": "Update todo description",
-    "completed": true,
-    "_id": "65c4f2a325d3d302f12594be"
-  }
-}
-```
+Returns a message and status of 202
 
 ### Error Handling
 
 - If the update fails due to any reason, the API will return an error response with an appropriate error message.
-
-### Sample Usage
-
-```
-PUT /api/todo/65c4606425d3d302f1259446
-```
-
----
-
-Note: Replace `mongoose.Types.ObjectId` with the actual data type as necessary in your documentation. Additionally, consider adding more detailed descriptions and examples as needed for a comprehensive documentation.

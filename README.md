@@ -37,6 +37,6 @@ Possible thoughts:
 Maybe not exactly bugs, but something that I do need to fix:
 
 - add error toast when trying to register with an already registered email
-  - currently only logs an error in console
+  - currently only logs an error in console ✅
 - add error toast when attempting to login with invalid email or password
-  - currently only logs an error in console
+  - currently only logs an error in console ✅
